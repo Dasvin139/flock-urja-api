@@ -1,0 +1,72 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Urja Meter Ops REST API",
+    "version": "1.0.0",
+    "description": "Clean, documented REST API service over the legacy Urja Meter Ops portal."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "Service is healthy"
+          }
+        }
+      }
+    },
+    "/api/v1/meters": {
+      "get": {
+        "summary": "List and filter smart meters",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "page_size", "in": "query", "schema": { "type": "integer", "default": 20 } },
+          { "name": "q", "in": "query", "description": "Search substring in meterId or serialNo", "schema": { "type": "string" } },
+          { "name": "make", "in": "query", "description": "Filter by meter manufacturer (e.g. L&T, Genus, Allied, HPL)", "schema": { "type": "string" } },
+          { "name": "status", "in": "query", "description": "Filter by install status (Installed, Faulty, Decommissioned)", "schema": { "type": "string" } },
+          { "name": "phase_type", "in": "query", "description": "Filter by phase (single, three)", "schema": { "type": "string" } },
+          { "name": "dt_code", "in": "query", "description": "Filter by Distribution Transformer code", "schema": { "type": "string" } },
+          { "name": "refresh", "in": "query", "description": "Force fresh fetch bypassing cache", "schema": { "type": "boolean", "default": false } }
+        ],
+        "responses": {
+          "200": { "description": "List of meters with pagination metadata" }
+        }
+      }
+    },
+    "/api/v1/meters/{meterId}": {
+      "get": {
+        "summary": "Get meter detail and network hierarchy",
+        "parameters": [
+          { "name": "meterId", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "refresh", "in": "query", "schema": { "type": "boolean" } }
+        ],
+        "responses": {
+          "200": { "description": "Meter specifications and hierarchical network location" },
+          "404": { "description": "Meter not found" }
+        }
+      }
+    },
+    "/api/v1/meters/{meterId}/consumption": {
+      "get": {
+        "summary": "Get consumption history with interval kWh calculation",
+        "parameters": [
+          { "name": "meterId", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "from", "in": "query", "description": "Filter readings from ISO timestamp", "schema": { "type": "string" } },
+          { "name": "to", "in": "query", "description": "Filter readings to ISO timestamp", "schema": { "type": "string" } },
+          { "name": "refresh", "in": "query", "schema": { "type": "boolean" } }
+        ],
+        "responses": {
+          "200": { "description": "Chronological list of energy readings with interval kWh values" },
+          "404": { "description": "Meter not found" }
+        }
+      }
+    }
+  }
+}

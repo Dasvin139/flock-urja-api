@@ -1,0 +1,23 @@
+{
+  "name": "flock-urja-api",
+  "version": "1.0.0",
+  "description": "Clean, documented REST API service over the Urja Meter Ops legacy portal",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "keywords": ["smart-meter", "api", "flock-energy", "express"],
+  "author": "Dasvin",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "axios-cookiejar-support": "^5.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "swagger-ui-express": "^5.0.1",
+    "tough-cookie": "^5.0.0"
+  }
+}
